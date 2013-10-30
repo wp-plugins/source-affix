@@ -8,11 +8,11 @@ Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-A plugin for adding source links to your post. Supports Page and custom post type also.
+A plugin for adding source links to your Post. Supports Page and Custom Post Type also.
 
 == Description ==
 
-This is right plugin for you if you want to add source link to your post. It adds separate meta box for the input of source text. You have to put each source in separate line. You can use this feature to any Post or Page. Even more, it also supports custom post type also. Several plugin settings are also available. You can show sources in comma separated form or in a unordered list. You can append or prepend source to the content.
+This is right plugin for you if you want to add source link to your post. It adds separate meta box for the input of source text. You have to put each source in separate line. You can use this feature to any Post or Page. Even more, it also supports custom post type. Several plugin settings are also available. You can show sources in comma separated form or in an unordered list. You can append or prepend source to the content.
 
 
 
@@ -34,7 +34,7 @@ This is right plugin for you if you want to add source link to your post. It add
 
 == Frequently Asked Questions ==
 
-= There is something cool you could add...
+= There is something cool you could add... =
 
 Nice, make a post on the [Support Forum](http://wordpress.org/support/plugin/source-affix "Source Affix Support") and let us know. We are always looking for ways to improve our plugins.
 
