@@ -42,6 +42,7 @@ Nice, make a post on the [Support Forum](http://wordpress.org/support/plugin/sou
 
 1. Admin Settings page
 2. Source box while adding new post item
+3. Sample view of source in front end
 
 == Changelog ==
 
