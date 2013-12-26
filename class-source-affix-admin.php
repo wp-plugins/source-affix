@@ -11,7 +11,7 @@
  */
 
 /**
- * Source Affix Admin class. 
+ * Source Affix Admin class.
  *
  * @package Source_Affix_Admin
  * @author  Nilambar Sharma <nilambar@outlook.com>
@@ -62,7 +62,7 @@ class Source_Affix_Admin
 
 
         /*
-         * Add an action link pointing to the options page.		 		
+         * Add an action link pointing to the options page.
          */
         $plugin_basename = plugin_basename(plugin_dir_path(__FILE__) . 'source-affix.php');
         add_filter('plugin_action_links_' . $plugin_basename, array($this, 'add_action_links'));
@@ -224,7 +224,7 @@ class Source_Affix_Admin
 
         wp_nonce_field(plugin_basename(__FILE__), 'sa_source_nonce');
 
-        $html = '<textarea id="sa-source" name="sa_source" placeholder="' . __('Enter your sources here.', $this->plugin_slug) . '" style="height:100px; width:99%;">' . get_post_meta($post->ID, 'sa_source', true) . '</textarea><p>' . __('Enter your sources here. Title and link separated by <strong>||</strong> . Each source in separate line.', $this->plugin_slug) .' '. __('For example : ', $this->plugin_slug) . '</p>';
+        $html = '<textarea id="sa-source" name="sa_source" placeholder="' . __('Enter your sources here.', $this->plugin_slug) . '" style="height:100px; width:99%;">' . esc_textarea( get_post_meta($post->ID, 'sa_source', true) ) . '</textarea><p>' . __('Enter your sources here. Title and link separated by <strong>||</strong> . Each source in separate line.', $this->plugin_slug) .' '. __('For example : ', $this->plugin_slug) . '</p>';
         $html .= '<ul style="list-style-type:none; list-style-position: inside;font-style: italic;">';
         $html .= '<li>' . __('Website Example||http://www.example.com', $this->plugin_slug) . '</li>';
         $html .= '<li>' . __('Another website||http://www.another.com', $this->plugin_slug) . '</li>';
@@ -255,7 +255,7 @@ class Source_Affix_Admin
             } // end if
             // Make sure the user has permissions to post
             // Read the post message
-            $sa_source_message = isset($_POST['sa_source']) ? $_POST['sa_source'] : '';
+            $sa_source_message = isset($_POST['sa_source']) ? esc_textarea( $_POST['sa_source'])  : '';
 
 
             // If the value for the source message exists, delete it first.
