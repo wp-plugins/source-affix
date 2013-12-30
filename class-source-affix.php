@@ -11,7 +11,7 @@
  */
 
 /**
- * Source Affix Plugin class. 
+ * Source Affix Plugin class.
  *
  * @package Source_Affix
  * @author  Nilambar Sharma <nilambar@outlook.com>
@@ -244,8 +244,8 @@ class Source_Affix
 
         // get an array of blog ids
         $sql = "SELECT blog_id FROM $wpdb->blogs
-			WHERE archived = '0' AND spam = '0'
-			AND deleted = '0'";
+            WHERE archived = '0' AND spam = '0'
+            AND deleted = '0'";
 
         return $wpdb->get_col($sql);
     }
@@ -312,8 +312,8 @@ class Source_Affix
     /**
      * Affix source to the content.
      *
-     * @params	$content	The content.
-     * @returns				The content with affixed source.
+     * @params  $content    The content.
+     * @returns             The content with affixed source.
      */
     function affix_sa_source($content)
     {
@@ -332,7 +332,7 @@ class Source_Affix
         }
         if ('' != get_post_meta(get_the_ID(), 'sa_source', true))
         {
-			$meta_message ='';
+            $meta_message ='';
             $meta_message .= get_post_meta(get_the_ID(), 'sa_source', true);
 
             $arr_meta = preg_split("/[\r\n]+/", $meta_message, -1, PREG_SPLIT_NO_EMPTY);
@@ -349,7 +349,7 @@ class Source_Affix
                 }
             }
 
-            $source_message = '<div class="sa-source-wrapper" style="clear:both;"><strong>' . $sa_source_title . '</strong><br/>';
+            $source_message = '<div class="sa-source-wrapper"><strong>' . $sa_source_title . '</strong>';
             switch ($sa_source_style)
             {
                 case 'COMMA':
@@ -386,7 +386,7 @@ class Source_Affix
                     $content = $source_message . $content;
                 }
             } // end if
-        } // end if 
+        } // end if
 
         return $content;
     }
