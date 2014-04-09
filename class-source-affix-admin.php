@@ -37,6 +37,11 @@ class Source_Affix_Admin
      */
     protected $plugin_screen_hook_suffix = null;
 
+	protected $options = array();
+
+
+
+
     /**
      * Initialize the plugin by loading admin scripts & styles and adding a
      * settings page and menu.
@@ -52,30 +57,34 @@ class Source_Affix_Admin
          */
         $plugin = Source_Affix::get_instance();
         $this->plugin_slug = $plugin->get_plugin_slug();
+		$this->options = $plugin->source_affix_get_options_array();
+
 
         // Load admin style sheet and JavaScript.
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_styles'));
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_scripts'));
 
+
+
         // Add the options page and menu item.
-        add_action('admin_menu', array($this, 'add_plugin_admin_menu'));
+        add_action('admin_menu', array($this, 'source_affix_add_plugin_admin_menu'));
 
 
         /*
          * Add an action link pointing to the options page.
          */
         $plugin_basename = plugin_basename(plugin_dir_path(__FILE__) . 'source-affix.php');
-        add_filter('plugin_action_links_' . $plugin_basename, array($this, 'add_action_links'));
+        add_filter('plugin_action_links_' . $plugin_basename, array($this, 'source_affix_add_action_links'));
 
         /*
          * Define custom functionality.
          */
 
         // Add the post meta box to the post editor
-        add_action('add_meta_boxes', array($this, 'add_sa_metabox'));
-        add_action('save_post', array($this, 'save_sa_source'));
+        add_action('add_meta_boxes', array($this, 'source_affix_add_sa_metabox'));
+        add_action('save_post', array($this, 'source_affix_save_sa_source'));
 
-        add_action('admin_init', array($this, 'sa_plugin_register_settings'));
+        add_action('admin_init', array($this, 'source_affix_plugin_register_settings'));
     }
 
     /**
@@ -115,7 +124,7 @@ class Source_Affix_Admin
         $screen = get_current_screen();
         if ($this->plugin_screen_hook_suffix == $screen->id)
         {
-            wp_enqueue_style($this->plugin_slug . '-admin-styles', plugins_url('css/admin.css', __FILE__), array(), Source_Affix::VERSION);
+            wp_enqueue_style('source-affix-admin-styles', plugins_url('css/admin.css', __FILE__), array(), Source_Affix::VERSION);
         }
     }
 
@@ -137,7 +146,7 @@ class Source_Affix_Admin
         $screen = get_current_screen();
         if ($this->plugin_screen_hook_suffix == $screen->id)
         {
-            wp_enqueue_script($this->plugin_slug . '-admin-script', plugins_url('js/admin.js', __FILE__), array('jquery'), Source_Affix::VERSION);
+            wp_enqueue_script( 'source-affix-admin-script', plugins_url('js/admin.js', __FILE__), array('jquery'), Source_Affix::VERSION);
         }
     }
 
@@ -146,14 +155,14 @@ class Source_Affix_Admin
      *
      * @since    1.0.0
      */
-    public function add_plugin_admin_menu()
+    public function source_affix_add_plugin_admin_menu()
     {
 
         /*
          * Add a settings page for this plugin to the Settings menu.
          */
         $this->plugin_screen_hook_suffix = add_options_page(
-                __('Source Affix Settings Page', $this->plugin_slug), __('Source Affix', $this->plugin_slug), 'manage_options', $this->plugin_slug, array($this, 'display_plugin_admin_page')
+                __('Source Affix Settings Page', 'source-affix'), __('Source Affix', 'source-affix'), 'manage_options', 'source-affix', array($this, 'display_plugin_admin_page')
         );
     }
 
@@ -169,13 +178,9 @@ class Source_Affix_Admin
         {
             wp_die('You do not have sufficient permissions to access this page.');
         }
-        $options = get_option('sa_plugin_options');
-        if ($options)
-        {
-            extract($options);
-        }
 
         include_once( 'views/admin.php' );
+
     }
 
     /**
@@ -183,12 +188,12 @@ class Source_Affix_Admin
      *
      * @since    1.0.0
      */
-    public function add_action_links($links)
+    public function source_affix_add_action_links($links)
     {
 
         return array_merge(
                 array(
-            'settings' => '<a href="' . admin_url('options-general.php?page=' . $this->plugin_slug) . '">' . __('Settings', $this->plugin_slug) . '</a>'
+            'settings' => '<a href="' . admin_url('options-general.php?page=' . $this->plugin_slug) . '">' . __('Settings', 'source-affix' ) . '</a>'
                 ), $links
         );
     }
@@ -196,9 +201,9 @@ class Source_Affix_Admin
     /**
      * Adds the meta box below the post content editor on the post edit dashboard.
      */
-    function add_sa_metabox()
+    function source_affix_add_sa_metabox()
     {
-        $options = get_option('sa_plugin_options');
+        $options = $this -> options ;
         if ($options)
         {
             extract($options);
@@ -210,7 +215,7 @@ class Source_Affix_Admin
             foreach ($available_post_types_array as $ptype)
             {
                 add_meta_box(
-                        'sa_source', __('Sources', $this->plugin_slug), array($this, 'sa_source_display'), $ptype, 'normal', 'high'
+                        'sa_source', __('Sources', 'source-affix' ), array($this, 'source_affix_sa_source_display'), $ptype, 'normal', 'high'
                 );
             }
         }
@@ -219,15 +224,23 @@ class Source_Affix_Admin
     /**
      * Renders the nonce and the textarea for the notice.
      */
-    function sa_source_display($post)
+    function source_affix_sa_source_display($post)
     {
 
         wp_nonce_field(plugin_basename(__FILE__), 'sa_source_nonce');
 
-        $html = '<textarea id="sa-source" name="sa_source" placeholder="' . __('Enter your sources here.', $this->plugin_slug) . '" style="height:100px; width:99%;">' . esc_textarea( get_post_meta($post->ID, 'sa_source', true) ) . '</textarea><p>' . __('Enter your sources here. Title and link separated by <strong>||</strong> . Each source in separate line.', $this->plugin_slug) .' '. __('For example : ', $this->plugin_slug) . '</p>';
+        $html = '<textarea id="sa-source" name="sa_source" placeholder="' . __('Enter your sources here.', 'source-affix' ) . '" style="height:100px; width:99%;">' . esc_textarea( get_post_meta($post->ID, 'sa_source', true) ) . '</textarea>';
+
+        $html .= '<p>';
+        $html .= __('Enter your sources here.','source-affix');
+        $html .= ' ' . sprintf(__('Title and link separated by %s||%s.','source-affix'), '<strong>' , '</strong>');
+        $html .= ' ' . __('Each source in separate line.', 'source-affix' ) ;
+        $html .= ' ' . __('For example:', 'source-affix' );
+        $html .= '</p>';
+
         $html .= '<ul style="list-style-type:none; list-style-position: inside;font-style: italic;">';
-        $html .= '<li>' . __('Website Example||http://www.example.com', $this->plugin_slug) . '</li>';
-        $html .= '<li>' . __('Another website||http://www.another.com', $this->plugin_slug) . '</li>';
+        $html .= '<li>' . 'Website Example||http://www.example.com' . '</li>';
+        $html .= '<li>' . 'Another website||http://www.another.com' . '</li>';
         $html .= '</ul>';
 
         echo $html;
@@ -238,7 +251,7 @@ class Source_Affix_Admin
      *
      * @params	$post_id	The ID of the post that we're serializing
      */
-    function save_sa_source($post_id)
+    function source_affix_save_sa_source($post_id)
     {
         if (isset($_POST['sa_source_nonce']) && isset($_POST['post_type']))
         {
@@ -271,9 +284,100 @@ class Source_Affix_Admin
     /**
      * Register plugin settings
      */
-    public function sa_plugin_register_settings()
+    public function source_affix_plugin_register_settings()
     {
-        register_setting('sa-plugin-options-group', 'sa_plugin_options');
+        register_setting('sa-plugin-options-group', 'sa_plugin_options', array( $this, 'source_affix_plugin_options_validate') );
+
+		add_settings_section('main_settings', __( 'Source Affix Settings', 'source-affix' ) , array($this, 'source_affix_plugin_section_text_callback'), 'source-affix-main');
+
+		add_settings_field('sa_source_posttypes', __( 'Select Source Affix for', 'source-affix' ), array($this, 'sa_source_posttypes_callback'), 'source-affix-main', 'main_settings');
+		add_settings_field('sa_source_title', __( 'Source Title', 'source-affix' ), array($this, 'sa_source_title_callback'), 'source-affix-main', 'main_settings');
+		add_settings_field('sa_source_style', __( 'Source Style', 'source-affix' ), array($this, 'sa_source_style_callback'), 'source-affix-main', 'main_settings');
+		add_settings_field('sa_source_open_style', __( 'Source Open Style', 'source-affix' ), array($this, 'sa_source_open_style_callback'), 'source-affix-main', 'main_settings');
+		add_settings_field('sa_source_position', __( 'Source Position', 'source-affix' ), array($this, 'sa_source_position_callback'), 'source-affix-main', 'main_settings');
+
+
     }
+	// validate our options
+	function source_affix_plugin_options_validate($input) {
+
+		$input['sa_source_title'] = sanitize_text_field($input['sa_source_title']);
+
+		return $input;
+	}
+
+	function source_affix_plugin_section_text_callback() {
+    	echo '<p>'.__('Change your Source Affix settings.', 'source-affix' ).'</p>';
+	}
+
+	function sa_source_posttypes_callback() {
+		?>
+		<p>
+			<input type="checkbox" name="sa_plugin_options[sa_source_posttypes][post]" value="1"
+			<?php checked(isset($this -> options['sa_source_posttypes']['post']) && 1 == $this -> options['sa_source_posttypes']['post']); ?> />&nbsp;<?php _e("Post",  'source-affix' ); ?>
+		</p>
+		<p>
+			<input type="checkbox" name="sa_plugin_options[sa_source_posttypes][page]" value="1"
+			<?php checked(isset($this -> options['sa_source_posttypes']['page']) && 1 == $this -> options['sa_source_posttypes']['page']); ?> />&nbsp;<?php _e("Page",  'source-affix' ); ?>
+		</p>
+		<?php
+		$args = array(
+			'public' => true,
+			'_builtin' => false
+		);
+		$post_types_custom = get_post_types($args);
+
+		if (!empty($post_types_custom)){
+			foreach ($post_types_custom as $ptype){
+			?>
+			<p>
+				<input type="checkbox" name="sa_plugin_options[sa_source_posttypes][<?php echo $ptype ?>]" value="1"
+				<?php checked( isset($this -> options['sa_source_posttypes'][$ptype]) && 1 == $this -> options['sa_source_posttypes'][$ptype]); ?> />&nbsp;<?php echo ucfirst($ptype); ?>
+			</p>
+			<?php
+			}
+		}
+
+
+	} // end function sa_source_posttypes_callback
+	function sa_source_title_callback() {
+		?>
+		<input type="text" id="sa_source_title" name="sa_plugin_options[sa_source_title]" value="<?php echo $this -> options['sa_source_title'] ; ?>" />
+		<p class="description"><?php _e("Enter source title",  'source-affix' ); ?></p>
+		<?php
+	}
+	function sa_source_style_callback() {
+		?>
+		<select id="sa_source_style" name="sa_plugin_options[sa_source_style]">
+            <option value="COMMA" <?php selected($this -> options['sa_source_style'], 'COMMA'); ?>><?php _e("Comma Separated", 'source-affix' ); ?></option>
+            <option value="LIST" <?php selected($this -> options['sa_source_style'], 'LIST'); ?>><?php _e("List",  'source-affix'); ?></option>
+        </select>
+
+        <p class="description"><?php _e("Select source display style",  'source-affix'); ?></p>
+		<?php
+	}
+	function sa_source_open_style_callback() {
+		?>
+		<select id="sa_source_open_style" name="sa_plugin_options[sa_source_open_style]">
+            <option value="SELF" <?php selected($this -> options['sa_source_open_style'], 'SELF'); ?>><?php _e("Current", 'source-affix'); ?></option>
+            <option value="BLANK" <?php selected($this -> options['sa_source_open_style'], 'BLANK'); ?>>
+                <?php _e("New Page", 'source-affix'); ?></option>
+        </select>
+        <p class="description"><?php _e("Select how to open source page", 'source-affix' ); ?></p>
+		<?php
+	}
+	function sa_source_position_callback() {
+		?>
+		<select id="sa_source_position" name="sa_plugin_options[sa_source_position]">
+            <option value="APPEND" <?php selected($this -> options['sa_source_position'], 'APPEND'); ?>>
+                <?php _e("End of the content", 'source-affix' ); ?></option>
+            <option value="PREPEND" <?php selected($this -> options['sa_source_position'], 'PREPEND'); ?>>
+                <?php _e("Beginning of the content", 'source-affix' ); ?></option>
+        </select>
+        <p class="description"><?php _e("Select position of the source", 'source-affix' ); ?></p>
+		<?php
+	}
+
+
 
 }

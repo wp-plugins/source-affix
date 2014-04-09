@@ -26,7 +26,7 @@ class Source_Affix
      * @var     string
      */
 
-    const VERSION = '1.0.0';
+    const VERSION = '1.0.3';
 
     /**
      * Unique identifier for your plugin.
@@ -50,13 +50,16 @@ class Source_Affix
      *
      * @var      array
      */
-    protected static $default_options = array(
-        'sa_source_posttypes' => array('post' => 1),
-        'sa_source_title' => 'Source :',
-        'sa_source_style' => 'COMMA',
-        'sa_source_open_style' => 'BLANK',
-        'sa_source_position' => 'APPEND',
-    );
+    protected static $default_options = null ;
+    // protected $default_options = array(
+    //     'sa_source_posttypes' => array('post' => 1),
+    //     'sa_source_title' => 'Source :',
+    //     'sa_source_style' => 'COMMA',
+    //     'sa_source_open_style' => 'BLANK',
+    //     'sa_source_position' => 'APPEND',
+    // );
+
+	protected $options = array();
 
     /**
      * Instance of this class.
@@ -86,10 +89,23 @@ class Source_Affix
         add_action('wp_enqueue_scripts', array($this, 'enqueue_styles'));
         add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
 
+        self :: $default_options = array(
+            'sa_source_posttypes' => array('post' => 1),
+            'sa_source_title' => 'Source :',
+            'sa_source_style' => 'COMMA',
+            'sa_source_open_style' => 'BLANK',
+            'sa_source_position' => 'APPEND',
+        );
+
+		$this -> _setDefaultOptions();
+
+		//get current options
+        $this->_getCurrentOptions();
+
         /**
          * Define custom functionality.
          */
-        add_filter('the_content', array($this, 'affix_sa_source'));
+        add_filter('the_content', array($this, 'source_affix_affix_sa_source'));
     }
 
     /**
@@ -259,7 +275,7 @@ class Source_Affix
     {
         // Define activation functionality here
         $option_name = 'sa_plugin_options';
-        update_option($option_name, self::$default_options);
+        update_option($option_name, self :: $default_options);
     }
 
     /**
@@ -271,7 +287,7 @@ class Source_Affix
     {
         // Define deactivation functionality here
         $option_name = 'sa_plugin_options';
-        delete_option($option_name);
+        // delete_option($option_name);
     }
 
     /**
@@ -315,9 +331,9 @@ class Source_Affix
      * @params  $content    The content.
      * @returns             The content with affixed source.
      */
-    function affix_sa_source($content)
+    function source_affix_affix_sa_source($content)
     {
-        $options = get_option('sa_plugin_options');
+        $options = $this -> options ;
         if ($options)
         {
             extract($options);
@@ -330,10 +346,11 @@ class Source_Affix
         {
             return $content;
         }
-        if ('' != get_post_meta(get_the_ID(), 'sa_source', true))
+        $sa_source = get_post_meta(get_the_ID(), 'sa_source', true) ;
+        if ('' != $sa_source )
         {
             $meta_message ='';
-            $meta_message .= get_post_meta(get_the_ID(), 'sa_source', true);
+            $meta_message .= $sa_source;
 
             $arr_meta = preg_split("/[\r\n]+/", $meta_message, -1, PREG_SPLIT_NO_EMPTY);
             if (!empty($arr_meta) && is_array($arr_meta))
@@ -375,7 +392,7 @@ class Source_Affix
 
             $source_message .= '</div>';
 
-            if (is_single() || is_page())
+            if ( is_singular() )
             {
                 if ($sa_source_position == 'APPEND')
                 {
@@ -390,5 +407,25 @@ class Source_Affix
 
         return $content;
     }
+	private function _getCurrentOptions()
+    {
+		$sa_options = array_merge( self :: $default_options , (array) get_option( 'sa_plugin_options', array() ) );
+        $this->options = $sa_options;
+    }
+	//get default options and saves in options table
+    private function _setDefaultOptions()
+    {
+        if( !get_option( 'sa_plugin_options' ) ) {
+            update_option('sa_plugin_options', self :: $default_options);
+        }
+    }
+	private function _removePluginOptions()
+    {
+        delete_option('sa_plugin_options');
+    }
+
+	public function source_affix_get_options_array(){
+		return $this -> options;
+	}
 
 }

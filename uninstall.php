@@ -15,3 +15,4 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 }
 
 //Define uninstall functionality here
+delete_option('sa_plugin_options');

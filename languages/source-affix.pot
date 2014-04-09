@@ -1,120 +1,152 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Source Affix\n"
-"POT-Creation-Date: 2013-10-26 08:23+0545\n"
-"PO-Revision-Date: 2013-10-26 08:24+0545\n"
+"POT-Creation-Date: 2014-04-08 07:23+0545\n"
+"PO-Revision-Date: 2014-04-08 07:23+0545\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.7\n"
+"X-Generator: Poedit 1.5.4\n"
 "X-Poedit-KeywordsList: _;gettext;gettext_noop;__;_e\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SearchPath-0: ../../source-affix\n"
 
-#: ../../source-affix/class-source-affix-admin.php:156
+#: ../../source-affix/class-source-affix-admin.php:165
 msgid "Source Affix Settings Page"
 msgstr ""
 
-#: ../../source-affix/class-source-affix-admin.php:156
+#: ../../source-affix/class-source-affix-admin.php:165
 msgid "Source Affix"
 msgstr ""
 
-#: ../../source-affix/class-source-affix-admin.php:191
+#: ../../source-affix/class-source-affix-admin.php:196
 msgid "Settings"
 msgstr ""
 
-#: ../../source-affix/class-source-affix-admin.php:213
+#: ../../source-affix/class-source-affix-admin.php:218
 msgid "Sources"
 msgstr ""
 
-#: ../../source-affix/class-source-affix-admin.php:227
+#: ../../source-affix/class-source-affix-admin.php:232
+#: ../../source-affix/class-source-affix-admin.php:235
 msgid "Enter your sources here."
 msgstr ""
 
-#: ../../source-affix/class-source-affix-admin.php:227
-msgid ""
-"Enter your sources here. Title and link separated by <strong>||</strong> . "
-"Each source in separate line."
+#: ../../source-affix/class-source-affix-admin.php:236
+#, php-format
+msgid "Title and link separated by %s||%s."
 msgstr ""
 
-#: ../../source-affix/class-source-affix-admin.php:227
-msgid "For example : "
+#: ../../source-affix/class-source-affix-admin.php:237
+msgid "Each source in separate line."
 msgstr ""
 
-#: ../../source-affix/class-source-affix-admin.php:229
-msgid "Website Example||http://www.example.com"
+#: ../../source-affix/class-source-affix-admin.php:238
+msgid "For example:"
 msgstr ""
 
-#: ../../source-affix/class-source-affix-admin.php:230
-msgid "Another website||http://www.another.com"
+#: ../../source-affix/class-source-affix-admin.php:291
+msgid "Source Affix Settings"
 msgstr ""
 
-#: ../../source-affix/views/admin.php:24
+#: ../../source-affix/class-source-affix-admin.php:293
 msgid "Select Source Affix for"
 msgstr ""
 
-#: ../../source-affix/views/admin.php:29
-msgid "Post"
-msgstr ""
-
-#: ../../source-affix/views/admin.php:32
-msgid "Page"
-msgstr ""
-
-#: ../../source-affix/views/admin.php:56
+#: ../../source-affix/class-source-affix-admin.php:294
 msgid "Source Title"
 msgstr ""
 
-#: ../../source-affix/views/admin.php:59
-msgid "Enter title"
-msgstr ""
-
-#: ../../source-affix/views/admin.php:63
+#: ../../source-affix/class-source-affix-admin.php:295
 msgid "Source Style"
 msgstr ""
 
-#: ../../source-affix/views/admin.php:67
-msgid "Comma Separated"
-msgstr ""
-
-#: ../../source-affix/views/admin.php:68
-msgid "List"
-msgstr ""
-
-#: ../../source-affix/views/admin.php:71
-msgid "Select source display style"
-msgstr ""
-
-#: ../../source-affix/views/admin.php:75
+#: ../../source-affix/class-source-affix-admin.php:296
 msgid "Source Open Style"
 msgstr ""
 
-#: ../../source-affix/views/admin.php:79
-msgid "Current"
-msgstr ""
-
-#: ../../source-affix/views/admin.php:81
-msgid "New Page"
-msgstr ""
-
-#: ../../source-affix/views/admin.php:83
-msgid "Select how to open source page"
-msgstr ""
-
-#: ../../source-affix/views/admin.php:87
+#: ../../source-affix/class-source-affix-admin.php:297
 msgid "Source Position"
 msgstr ""
 
-#: ../../source-affix/views/admin.php:92
+#: ../../source-affix/class-source-affix-admin.php:310
+msgid "Change your Source Affix settings."
+msgstr ""
+
+#: ../../source-affix/class-source-affix-admin.php:317
+msgid "Post"
+msgstr ""
+
+#: ../../source-affix/class-source-affix-admin.php:321
+msgid "Page"
+msgstr ""
+
+#: ../../source-affix/class-source-affix-admin.php:346
+msgid "Enter source title"
+msgstr ""
+
+#: ../../source-affix/class-source-affix-admin.php:352
+msgid "Comma Separated"
+msgstr ""
+
+#: ../../source-affix/class-source-affix-admin.php:353
+msgid "List"
+msgstr ""
+
+#: ../../source-affix/class-source-affix-admin.php:356
+msgid "Select source display style"
+msgstr ""
+
+#: ../../source-affix/class-source-affix-admin.php:362
+msgid "Current"
+msgstr ""
+
+#: ../../source-affix/class-source-affix-admin.php:364
+msgid "New Page"
+msgstr ""
+
+#: ../../source-affix/class-source-affix-admin.php:366
+msgid "Select how to open source page"
+msgstr ""
+
+#: ../../source-affix/class-source-affix-admin.php:373
 msgid "End of the content"
 msgstr ""
 
-#: ../../source-affix/views/admin.php:94
+#: ../../source-affix/class-source-affix-admin.php:375
 msgid "Beginning of the content"
 msgstr ""
 
-#: ../../source-affix/views/admin.php:96
+#: ../../source-affix/class-source-affix-admin.php:377
 msgid "Select position of the source"
+msgstr ""
+
+#: ../../source-affix/views/admin-right.php:5
+msgid "Help &amp; Support"
+msgstr ""
+
+#: ../../source-affix/views/admin-right.php:7
+msgid "Questions, bugs, or great ideas?"
+msgstr ""
+
+#: ../../source-affix/views/admin-right.php:8
+msgid "Visit our plugin support page"
+msgstr ""
+
+#: ../../source-affix/views/admin-right.php:19
+msgid "Contribute!"
+msgstr ""
+
+#: ../../source-affix/views/admin-right.php:21
+msgid "Wanna help make this plugin better?"
+msgstr ""
+
+#: ../../source-affix/views/admin-right.php:23
+msgid "Review and rate this plugin on WordPress.org"
+msgstr ""
+
+#: ../../source-affix/views/admin.php:37
+msgid "Save Changes"
 msgstr ""
