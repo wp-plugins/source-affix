@@ -12,7 +12,7 @@
  * Plugin Name:       Source Affix
  * Plugin URI:        http://wordpress.org/plugins/source-affix
  * Description:       Plugin to add sources in your posts
- * Version:           1.0.2
+ * Version:           1.0.3
  * Author:            Nilambar Sharma
  * Author URI:        http://nilambar.net
  * Text Domain:       source-affix-locale
