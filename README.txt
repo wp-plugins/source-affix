@@ -3,7 +3,7 @@ Contributors: rabmalin
 Donate link: http://www.nilambar.net/2013/10/source-affix-wordpress-plugin.html
 Tags: post, source, metabox, custom, posts, custom post type, meta, plugin,
 Requires at least: 3.5.1
-Tested up to: 3.8
+Tested up to: 3.9
 Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
