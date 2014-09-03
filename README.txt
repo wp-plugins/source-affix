@@ -1,10 +1,10 @@
 === Source Affix ===
 Contributors: rabmalin
-Donate link: http://www.nilambar.net/2013/10/source-affix-wordpress-plugin.html
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ramrojob1%40gmail%2ecom&lc=US&item_name=Nilambar%20Sharma&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted
 Tags: post, source, metabox, custom, posts, custom post type, meta, plugin,
-Requires at least: 3.5.1
-Tested up to: 3.9
-Stable tag: 1.0.3
+Requires at least: 3.8
+Tested up to: 3.9.2
+Stable tag: 1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ A plugin for adding source links to your Post. Supports Page and Custom Post Typ
 
 == Description ==
 
-<h3>Source Affix</h3>This is right plugin for you if you want to add source link to your post. It adds separate meta box for the input of source text. You have to put each source in separate line. You can use this feature to any Post or Page. Even more, it also supports custom post type. Several plugin settings are also available. You can show sources in comma separated form or in an unordered list. You can append or prepend source to the content.
+<h3>Source Affix</h3>This is right plugin for you if you want to add source link to your post. It adds separate meta box for the input of source text. You can use this feature to any Post or Page. Even more, it also supports custom post type. Several plugin settings are also available. You can show sources in comma separated form or in an unordered list. You can append or prepend source to the content.
 
 
 
@@ -45,6 +45,11 @@ Nice, make a post on the [Support Forum](http://wordpress.org/support/plugin/sou
 3. Sample view of source in front end
 
 == Changelog ==
+= 1.1 =
+* New meta box design for adding source name and list
+* Sortable links
+* Bug fixes
+
 = 1.0.3 =
 * Bug fixes
 * Multi site support
