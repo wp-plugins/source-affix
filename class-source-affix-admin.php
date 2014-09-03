@@ -40,8 +40,6 @@ class Source_Affix_Admin
 	protected $options = array();
 
 
-
-
     /**
      * Initialize the plugin by loading admin scripts & styles and adding a
      * settings page and menu.
@@ -64,11 +62,8 @@ class Source_Affix_Admin
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_styles'));
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_scripts'));
 
-
-
         // Add the options page and menu item.
         add_action('admin_menu', array($this, 'source_affix_add_plugin_admin_menu'));
-
 
         /*
          * Add an action link pointing to the options page.
@@ -115,15 +110,15 @@ class Source_Affix_Admin
      */
     public function enqueue_admin_styles()
     {
-
-        if (!isset($this->plugin_screen_hook_suffix))
-        {
-            return;
-        }
-
         $screen = get_current_screen();
-        if ($this->plugin_screen_hook_suffix == $screen->id)
+        $options = $this -> options ;
+        if ($options)
         {
+            extract($options);
+        }
+        $available_post_types_array = array_keys($sa_source_posttypes);
+
+        if ( in_array( $screen->id, $available_post_types_array ) ) {
             wp_enqueue_style('source-affix-admin-styles', plugins_url('css/admin.css', __FILE__), array(), Source_Affix::VERSION);
         }
     }
@@ -137,17 +132,19 @@ class Source_Affix_Admin
      */
     public function enqueue_admin_scripts()
     {
-
-        if (!isset($this->plugin_screen_hook_suffix))
-        {
-            return;
-        }
-
         $screen = get_current_screen();
-        if ($this->plugin_screen_hook_suffix == $screen->id)
+        $options = $this -> options ;
+        if ($options)
         {
+            extract($options);
+        }
+        $available_post_types_array = array_keys($sa_source_posttypes);
+
+        if ( in_array( $screen->id, $available_post_types_array ) ) {
+            wp_enqueue_script( 'jquery-ui-sortable' );
             wp_enqueue_script( 'source-affix-admin-script', plugins_url('js/admin.js', __FILE__), array('jquery'), Source_Affix::VERSION);
         }
+
     }
 
     /**
@@ -229,21 +226,34 @@ class Source_Affix_Admin
 
         wp_nonce_field(plugin_basename(__FILE__), 'sa_source_nonce');
 
-        $html = '<textarea id="sa-source" name="sa_source" placeholder="' . __('Enter your sources here.', 'source-affix' ) . '" style="height:100px; width:99%;">' . esc_textarea( get_post_meta($post->ID, 'sa_source', true) ) . '</textarea>';
+        $source_meta = get_post_meta($post->ID, 'sa_source', true);
 
-        $html .= '<p>';
-        $html .= __('Enter your sources here.','source-affix');
-        $html .= ' ' . sprintf(__('Title and link separated by %s||%s.','source-affix'), '<strong>' , '</strong>');
-        $html .= ' ' . __('Each source in separate line.', 'source-affix' ) ;
-        $html .= ' ' . __('For example:', 'source-affix' );
-        $html .= '</p>';
+        $links_array = source_affix_convert_meta_to_array( $source_meta );
 
-        $html .= '<ul style="list-style-type:none; list-style-position: inside;font-style: italic;">';
-        $html .= '<li>' . 'Website Example||http://www.example.com' . '</li>';
-        $html .= '<li>' . 'Another website||http://www.another.com' . '</li>';
-        $html .= '</ul>';
+        echo '<ul id="list-source-link">';
+        if (!empty($links_array) && is_array($links_array)) {
+            foreach ($links_array as $key => $link) {
+                echo '<li>';
+                echo '<span class="btn-move-source-link"><i class="dashicons dashicons-sort"></i></span>';
+                echo '<input type="text" name="link_title[]" value="'.esc_attr($link['title']).'"  class="regular-text code" placeholder="Enter title" />';
+                echo '<input type="text" name="link_url[]" value="'.esc_url($link['url']).'"  class="regular-text code" placeholder="Enter full URL" />';
+                echo '<span class="btn-remove-source-link"><i class="dashicons dashicons-no-alt"></i></span>';
+                echo '</li>';
+            }
+        }
+        else{
+            // show empty first field
+            echo '<li>';
+            echo '<span class="btn-move-source-link"><i class="dashicons dashicons-sort"></i></span>';
+            echo '<input type="text" name="link_title[]" value=""  class="regular-text code" placeholder="Enter title" />';
+            echo '<input type="text" name="link_url[]" value=""  class="regular-text code" placeholder="Enter full URL" />';
+            echo '<span class="btn-remove-source-link"><i class="dashicons dashicons-no-alt"></i></span>';
+            echo '</li>';
+        }
+        echo '</ul>';
+        echo '<a href="" class="button button-primary" id="btn-add-source-link">Add New</a>';
+        return;
 
-        echo $html;
     }
 
     /**
@@ -253,6 +263,7 @@ class Source_Affix_Admin
      */
     function source_affix_save_sa_source($post_id)
     {
+
         if (isset($_POST['sa_source_nonce']) && isset($_POST['post_type']))
         {
 
@@ -267,9 +278,19 @@ class Source_Affix_Admin
                 return;
             } // end if
             // Make sure the user has permissions to post
-            // Read the post message
-            $sa_source_message = isset($_POST['sa_source']) ? esc_textarea( $_POST['sa_source'])  : '';
 
+
+            $links_array = array();
+            if ( isset($_POST['link_title']) && !empty($_POST['link_title']) ) {
+                $cnt=0;
+                foreach ($_POST['link_title'] as $key => $lnk) {
+                    $links_array[$cnt]['title'] = $lnk;
+                    $links_array[$cnt]['url'] = $_POST['link_url'][$key];
+                    $cnt++;
+                }
+            }
+
+            $sa_source_message = source_affix_convert_array_to_meta($links_array);
 
             // If the value for the source message exists, delete it first.
             if (0 == count(get_post_meta($post_id, 'sa_source')))

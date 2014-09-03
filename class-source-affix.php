@@ -26,7 +26,7 @@ class Source_Affix
      * @var     string
      */
 
-    const VERSION = '1.0.3';
+    const VERSION = SOURCE_AFFIX_VERSION;
 
     /**
      * Unique identifier for your plugin.
@@ -349,19 +349,14 @@ class Source_Affix
         $sa_source = get_post_meta(get_the_ID(), 'sa_source', true) ;
         if ('' != $sa_source )
         {
-            $meta_message ='';
-            $meta_message .= $sa_source;
+            $links_array = source_affix_convert_meta_to_array( $sa_source );
 
-            $arr_meta = preg_split("/[\r\n]+/", $meta_message, -1, PREG_SPLIT_NO_EMPTY);
-            if (!empty($arr_meta) && is_array($arr_meta))
-            {
-                $single_link = array();
-                foreach ($arr_meta as $k => $eachline)
-                {
-                    $exp_arr = explode('||', $eachline);
-                    $lnk = '<a href="' . $exp_arr[1] . '" ';
+            $single_link = array();
+            if (!empty($links_array) && is_array($links_array)){
+                foreach ($links_array  as $key => $eachline) {
+                    $lnk = '<a href="' . $eachline['url'] . '" ';
                     $lnk .= ($sa_source_open_style == 'BLANK') ? ' target="_blank" ' : '';
-                    $lnk .= ' >' . $exp_arr[0] . '</a>';
+                    $lnk .= ' >' . $eachline['title'] . '</a>';
                     $single_link[] = $lnk;
                 }
             }
@@ -375,13 +370,8 @@ class Source_Affix
                 case 'LIST':
                     if (!empty($single_link))
                     {
-                        $source_message.= '<ul>';
-                        foreach ($single_link as $slink)
-                        {
-                            $source_message.= '<li>';
-                            $source_message.= $slink;
-                            $source_message.= '</li>';
-                        }
+                        $source_message.= '<ul class="list-source-links">';
+                        $source_message .= '<li>'.implode('</li><li>', $single_link).'</li>';
                         $source_message.= '</ul>';
                     }
                     break;
@@ -394,7 +384,7 @@ class Source_Affix
 
             if ( is_singular() )
             {
-                if ($sa_source_position == 'APPEND')
+                if ( 'APPEND' == $sa_source_position )
                 {
                     $content = $content . $source_message;
                 }
