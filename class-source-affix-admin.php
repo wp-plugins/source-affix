@@ -235,7 +235,7 @@ class Source_Affix_Admin
             foreach ($links_array as $key => $link) {
                 echo '<li>';
                 echo '<span class="btn-move-source-link"><i class="dashicons dashicons-sort"></i></span>';
-                echo '<input type="text" name="link_title[]" value="'.esc_attr($link['title']).'"  class="regular-text code" placeholder="Enter title" />';
+                echo '<input type="text" name="link_title[]" value="'.esc_attr($link['title']).'"  class="regular-text1 code" placeholder="Enter title" />';
                 echo '<input type="text" name="link_url[]" value="'.esc_url($link['url']).'"  class="regular-text code" placeholder="Enter full URL" />';
                 echo '<span class="btn-remove-source-link"><i class="dashicons dashicons-no-alt"></i></span>';
                 echo '</li>';
@@ -245,7 +245,7 @@ class Source_Affix_Admin
             // show empty first field
             echo '<li>';
             echo '<span class="btn-move-source-link"><i class="dashicons dashicons-sort"></i></span>';
-            echo '<input type="text" name="link_title[]" value=""  class="regular-text code" placeholder="Enter title" />';
+            echo '<input type="text" name="link_title[]" value=""  class="regular-text1 code" placeholder="Enter title" />';
             echo '<input type="text" name="link_url[]" value=""  class="regular-text code" placeholder="Enter full URL" />';
             echo '<span class="btn-remove-source-link"><i class="dashicons dashicons-no-alt"></i></span>';
             echo '</li>';

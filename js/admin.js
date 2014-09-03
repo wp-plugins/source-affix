@@ -26,7 +26,7 @@
         e.preventDefault();
         var $li = $('<li></li>');
         $li.append('<span class="btn-move-source-link"><i class="dashicons dashicons-sort"></i></span>');
-        $li.append('<input type="text" name="link_title[]" value=""  class="regular-text code" placeholder="Enter title" />');
+        $li.append('<input type="text" name="link_title[]" value=""  class="regular-text1 code" placeholder="Enter title" />');
         $li.append('<input type="text" name="link_url[]" value=""  class="regular-text code" placeholder="Enter full URL" />');
         $li.append('<span class="btn-remove-source-link"><i class="dashicons dashicons-no-alt"></i></span>');
         $li.appendTo('#list-source-link');
