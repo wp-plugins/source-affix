@@ -354,9 +354,14 @@ class Source_Affix
             $single_link = array();
             if (!empty($links_array) && is_array($links_array)){
                 foreach ($links_array  as $key => $eachline) {
-                    $lnk = '<a href="' . $eachline['url'] . '" ';
-                    $lnk .= ($sa_source_open_style == 'BLANK') ? ' target="_blank" ' : '';
-                    $lnk .= ' >' . $eachline['title'] . '</a>';
+                    if (! empty($eachline['url'] ) ) {
+                        $lnk = '<a href="' . $eachline['url'] . '" ';
+                        $lnk .= ($sa_source_open_style == 'BLANK') ? ' target="_blank" ' : '';
+                        $lnk .= ' >' . esc_attr($eachline['title']) . '</a>';
+                    }
+                    else{
+                        $lnk = esc_attr($eachline['title']);
+                    }
                     $single_link[] = $lnk;
                 }
             }

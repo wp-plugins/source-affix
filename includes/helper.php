@@ -36,7 +36,7 @@ function source_affix_convert_array_to_meta($arr){
     return $output;
   }
   foreach ($arr as $key => $link) {
-    if ( empty( $link['title'] ) || empty( $link['url'] ) ) {
+    if ( empty( $link['title'] ) ) {
       continue;
     }
     $output .= $link['title'];
