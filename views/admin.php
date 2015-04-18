@@ -11,7 +11,6 @@
 ?>
 <div class="wrap">
 
-
   <h2><?php echo esc_html( get_admin_page_title() ); ?></h2>
 
   <div id="poststuff">
@@ -25,19 +24,15 @@
 
           <div class="postbox">
 
-            
             <div class="inside">
-              
-				
-				<form action="options.php" method="post">
-				<?php settings_fields('sa-plugin-options-group'); ?>
-				<?php do_settings_sections('source-affix-main'); ?>
-				 
-				 
-				<?php submit_button(__('Save Changes', 'source-affix')); ?>
-				</form>
-              
 
+      				<form action="options.php" method="post">
+      				<?php settings_fields('sa-plugin-options-group'); ?>
+      				<?php do_settings_sections('source-affix-main'); ?>
+
+
+      				<?php submit_button(__('Save Changes', 'source-affix')); ?>
+      				</form>
 
             </div> <!-- .inside -->
 
@@ -50,7 +45,7 @@
       <!-- sidebar -->
       <div id="postbox-container-1" class="postbox-container">
 
-        <?php require_once( ( plugin_dir_path(__FILE__) ) . 'admin-right.php'); ?>
+        <?php require_once( SOURCE_AFFIX_DIR . '/views/admin-right.php'); ?>
 
       </div> <!-- #postbox-container-1 .postbox-container -->
 

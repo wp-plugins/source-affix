@@ -37,7 +37,7 @@ class Source_Affix_Admin
      */
     protected $plugin_screen_hook_suffix = null;
 
-	protected $options = array();
+  	protected $options = array();
 
 
     /**
@@ -55,7 +55,7 @@ class Source_Affix_Admin
          */
         $plugin = Source_Affix::get_instance();
         $this->plugin_slug = $plugin->get_plugin_slug();
-		$this->options = $plugin->source_affix_get_options_array();
+    		$this->options = $plugin->source_affix_get_options_array();
 
 
         // Load admin style sheet and JavaScript.
@@ -111,7 +111,7 @@ class Source_Affix_Admin
     public function enqueue_admin_styles()
     {
         $screen = get_current_screen();
-        $options = $this -> options ;
+        $options = $this->options ;
         if ($options)
         {
             extract($options);
@@ -133,7 +133,7 @@ class Source_Affix_Admin
     public function enqueue_admin_scripts()
     {
         $screen = get_current_screen();
-        $options = $this -> options ;
+        $options = $this->options;
         if ($options)
         {
             extract($options);
@@ -141,8 +141,19 @@ class Source_Affix_Admin
         $available_post_types_array = array_keys($sa_source_posttypes);
 
         if ( in_array( $screen->id, $available_post_types_array ) ) {
-            wp_enqueue_script( 'jquery-ui-sortable' );
-            wp_enqueue_script( 'source-affix-admin-script', plugins_url('js/admin.js', __FILE__), array('jquery'), Source_Affix::VERSION);
+
+          $extra_array = array(
+            'lang' => array(
+              'are_you_sure'   => __( 'Are you sure?', 'source-affix' ),
+              'enter_title'    => __( 'Enter Title', 'source-affix' ),
+              'enter_full_url' => __( 'Enter Full URL', 'source-affix' ),
+            ),
+          );
+
+          wp_register_script( 'source-affix-admin-script', plugins_url('js/admin.js', __FILE__), array( 'jquery', 'jquery-ui-sortable' ), Source_Affix::VERSION);
+          wp_localize_script( 'source-affix-admin-script', 'SAF_OBJ', $extra_array );
+          wp_enqueue_script( 'source-affix-admin-script' );
+
         }
 
     }
@@ -200,7 +211,7 @@ class Source_Affix_Admin
      */
     function source_affix_add_sa_metabox()
     {
-        $options = $this -> options ;
+        $options = $this->options;
         if ($options)
         {
             extract($options);
@@ -235,8 +246,8 @@ class Source_Affix_Admin
             foreach ($links_array as $key => $link) {
                 echo '<li>';
                 echo '<span class="btn-move-source-link"><i class="dashicons dashicons-sort"></i></span>';
-                echo '<input type="text" name="link_title[]" value="'.esc_attr($link['title']).'"  class="regular-text1 code" placeholder="Enter title" />';
-                echo '<input type="text" name="link_url[]" value="'.esc_url($link['url']).'"  class="regular-text code" placeholder="Enter full URL" />';
+                echo '<input type="text" name="link_title[]" value="'.esc_attr($link['title']).'"  class="regular-text1 code" placeholder="' . __( 'Enter Title', 'source-affix' ) . '" />';
+                echo '<input type="text" name="link_url[]" value="'.esc_url($link['url']).'"  class="regular-text code" placeholder="' . __( 'Enter Full URL', 'source-affix' ) . '" />';
                 echo '<span class="btn-remove-source-link"><i class="dashicons dashicons-no-alt"></i></span>';
                 echo '</li>';
             }
@@ -245,13 +256,13 @@ class Source_Affix_Admin
             // show empty first field
             echo '<li>';
             echo '<span class="btn-move-source-link"><i class="dashicons dashicons-sort"></i></span>';
-            echo '<input type="text" name="link_title[]" value=""  class="regular-text1 code" placeholder="Enter title" />';
-            echo '<input type="text" name="link_url[]" value=""  class="regular-text code" placeholder="Enter full URL" />';
+            echo '<input type="text" name="link_title[]" value=""  class="regular-text1 code" placeholder="' . __( 'Enter Title', 'source-affix' ) . '" />';
+            echo '<input type="text" name="link_url[]" value=""  class="regular-text code" placeholder="' . __( 'Enter Full URL', 'source-affix' ) . '" />';
             echo '<span class="btn-remove-source-link"><i class="dashicons dashicons-no-alt"></i></span>';
             echo '</li>';
         }
         echo '</ul>';
-        echo '<a href="" class="button button-primary" id="btn-add-source-link">Add New</a>';
+        echo '<a href="#" class="button button-primary" id="btn-add-source-link">' . __( 'Add New', 'source-affix' ) . '</a>';
         return;
 
     }
@@ -322,13 +333,16 @@ class Source_Affix_Admin
 	// validate our options
 	function source_affix_plugin_options_validate($input) {
 
-		$input['sa_source_title'] = sanitize_text_field($input['sa_source_title']);
+    $input['sa_source_title'] = sanitize_text_field( $input['sa_source_title'] );
+    if ( ! isset( $input['sa_source_posttypes'] ) ) {
+  		$input['sa_source_posttypes'] = array();
+    }
 
 		return $input;
 	}
 
 	function source_affix_plugin_section_text_callback() {
-    	echo '<p>'.__('Change your Source Affix settings.', 'source-affix' ).'</p>';
+    return;
 	}
 
 	function sa_source_posttypes_callback() {
@@ -363,18 +377,17 @@ class Source_Affix_Admin
 	} // end function sa_source_posttypes_callback
 	function sa_source_title_callback() {
 		?>
-		<input type="text" id="sa_source_title" name="sa_plugin_options[sa_source_title]" value="<?php echo $this -> options['sa_source_title'] ; ?>" />
-		<p class="description"><?php _e("Enter source title",  'source-affix' ); ?></p>
+		<input type="text" id="sa_source_title" name="sa_plugin_options[sa_source_title]" value="<?php echo $this->options['sa_source_title'] ; ?>" />
+		<p class="description"><?php _e("Enter Source Title",  'source-affix' ); ?></p>
 		<?php
 	}
 	function sa_source_style_callback() {
 		?>
-		<select id="sa_source_style" name="sa_plugin_options[sa_source_style]">
-            <option value="COMMA" <?php selected($this -> options['sa_source_style'], 'COMMA'); ?>><?php _e("Comma Separated", 'source-affix' ); ?></option>
-            <option value="LIST" <?php selected($this -> options['sa_source_style'], 'LIST'); ?>><?php _e("List",  'source-affix'); ?></option>
-        </select>
-
-        <p class="description"><?php _e("Select source display style",  'source-affix'); ?></p>
+  		<select id="sa_source_style" name="sa_plugin_options[sa_source_style]">
+          <option value="COMMA" <?php selected($this -> options['sa_source_style'], 'COMMA'); ?>><?php _e("Comma Separated", 'source-affix' ); ?></option>
+          <option value="LIST" <?php selected($this -> options['sa_source_style'], 'LIST'); ?>><?php _e("List",  'source-affix'); ?></option>
+      </select>
+      <p class="description"><?php _e("Select source display style",  'source-affix'); ?></p>
 		<?php
 	}
 	function sa_source_open_style_callback() {

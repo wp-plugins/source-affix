@@ -87,7 +87,6 @@ class Source_Affix
 
         // Load public-facing style sheet and JavaScript.
         add_action('wp_enqueue_scripts', array($this, 'enqueue_styles'));
-        add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
 
         self :: $default_options = array(
             'sa_source_posttypes' => array('post' => 1),
@@ -316,16 +315,6 @@ class Source_Affix
     }
 
     /**
-     * Register and enqueues public-facing JavaScript files.
-     *
-     * @since    1.0.0
-     */
-    public function enqueue_scripts()
-    {
-        wp_enqueue_script($this->plugin_slug . '-plugin-script', plugins_url('js/public.js', __FILE__), array('jquery'), self::VERSION);
-    }
-
-    /**
      * Affix source to the content.
      *
      * @params  $content    The content.
@@ -420,7 +409,7 @@ class Source_Affix
     }
 
 	public function source_affix_get_options_array(){
-		return $this -> options;
+		return $this->options;
 	}
 
 }
